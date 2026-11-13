@@ -9,7 +9,10 @@
   },
   "private": true,
   "dependencies": {
+    "@remotion/bundler": "4.0.543",
     "@remotion/cli": "4.0.543",
+    "@remotion/fonts": "4.0.543",
+    "@remotion/renderer": "4.0.543",
     "@remotion/zod-types": "4.0.543",
     "react": "19.3.1",
     "react-dom": "19.3.1",
@@ -28,7 +31,8 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "storyboard": "node scripts/render-storyboard.mjs && node scripts/storyboard-sheet.mjs"
   },
   "allowScripts": {
     "esbuild": false
