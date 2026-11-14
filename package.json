@@ -32,7 +32,9 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
-    "storyboard": "node scripts/render-storyboard.mjs && node scripts/storyboard-sheet.mjs"
+    "storyboard": "node scripts/render-storyboard.mjs && node scripts/storyboard-sheet.mjs",
+    "audio": "python3 scripts/make-audio.py",
+    "render:story": "remotion render MoajStory out/moaj-story.mp4 --crf=16"
   },
   "allowScripts": {
     "esbuild": false

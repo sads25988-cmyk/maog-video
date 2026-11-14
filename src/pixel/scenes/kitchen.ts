@@ -8,13 +8,19 @@ export type KitchenOpts = {
   smoke?: number; // 0..1
   hideCharacter?: boolean;
   hidePot?: boolean;
+  /** minutes past the hour shown on the wall clock */
+  clockMin?: number;
+  shine?: boolean; // clean pot twinkles
+  flame?: boolean;
+  /** draw characters (between room and smoke/lamp) */
+  actors?: (g: Gfx) => void;
 };
 
 const WARM = "#ffc183";
 
 export const drawKitchen = (g: Gfx, frame: number, o: KitchenOpts = {}) => {
   const t = frame / 30;
-  const { burning = true, expr = "shock", pose = "panic", smoke = 1, hideCharacter, hidePot } = o;
+  const { burning = true, expr = "shock", pose = "panic", smoke = 1, hideCharacter, hidePot, clockMin = 45, shine, flame = true, actors } = o;
 
   layer(
     g,
@@ -59,6 +65,21 @@ export const drawKitchen = (g: Gfx, frame: number, o: KitchenOpts = {}) => {
       lg.rect(20, 158, 74, 2, "d1");
       lg.rect(10, 212, 94, 6, "d2");
 
+      // ---------- wall clock (above the window)
+      lg.circle(57, 70, 13, "d2");
+      lg.circle(57, 70, 11, "w9");
+      for (let h = 0; h < 12; h++) {
+        const a = (h / 12) * Math.PI * 2;
+        lg.px(57 + Math.round(Math.sin(a) * 9), 70 - Math.round(Math.cos(a) * 9), "d1");
+      }
+      {
+        const ma = (clockMin / 60) * Math.PI * 2;
+        const ha = ((9 + clockMin / 60) / 12) * Math.PI * 2;
+        lg.line(57, 70, 57 + Math.sin(ma) * 9, 70 - Math.cos(ma) * 9, "k0", 1);
+        lg.line(57, 70, 57 + Math.sin(ha) * 6, 70 - Math.cos(ha) * 6, "k0", 2);
+        lg.px(57, 70, "r2");
+      }
+
       // ---------- upper cabinets
       lg.rect(176, 52, 94, 120, "d3");
       lg.rect(176, 52, 94, 4, "d4");
@@ -98,7 +119,7 @@ export const drawKitchen = (g: Gfx, frame: number, o: KitchenOpts = {}) => {
       // ---------- stove + the pot
       lg.rect(92, 296, 78, 6, "k2");
       // flame
-      for (let i = 0; i < 9; i++) {
+      for (let i = 0; flame && i < 9; i++) {
         const fh = 2 + Math.round((Math.sin(t * 18 + i * 1.7) + 1) * 1.5);
         lg.rect(104 + i * 6, 296 - fh, 2, fh, i % 2 ? "f1" : "f0");
       }
@@ -129,8 +150,22 @@ export const drawKitchen = (g: Gfx, frame: number, o: KitchenOpts = {}) => {
     },
   );
 
-  // ---------- Umm Fahad
-  if (!hideCharacter) drawUmmFahad(g, 214, 278, expr, pose, Math.floor(t * 30) % 90 < 4);
+  // ---------- clean pot twinkles
+  if (shine && !hidePot) {
+    const k = Math.floor(t * 6) % 4;
+    const tw = (x: number, y: number, s: number, c: string) => {
+      g.rect(x - s, y, s * 2 + 1, 1, c);
+      g.rect(x, y - s, 1, s * 2 + 1, c);
+    };
+    tw(108, 256, 3 + (k === 0 ? 1 : 0), "white");
+    tw(150, 270, 2 + (k === 2 ? 1 : 0), "white");
+    tw(124, 244, 2 + (k === 1 ? 1 : 0), "y2");
+    g.glow(128, 266, 22, "#e4e8ec", 0.1);
+  }
+
+  // ---------- characters
+  if (actors) actors(g);
+  else if (!hideCharacter) drawUmmFahad(g, 214, 278, expr, pose, Math.floor(t * 30) % 90 < 4);
 
   // ---------- smoke from the pot: soft clustered puffs (alpha → dithered texture)
   if (smoke > 0) {

@@ -13,7 +13,7 @@ const najdiCrenels = (g: Gfx, x0: number, x1: number, y: number, c: string) => {
   for (let x = x0; x + 6 <= x1; x += 9) g.poly([x, y, x + 6, y, x + 3, y - 5], c);
 };
 
-export const drawExterior = (g: Gfx, frame: number) => {
+export const drawExterior = (g: Gfx, frame: number, o: { arrival?: number } = {}) => {
   const t = frame / 30;
 
   // ---------------- sky
@@ -221,6 +221,25 @@ export const drawExterior = (g: Gfx, frame: number) => {
       }
 
 
+      // ---------------- arriving SUV (the mother-in-law), facing right
+      if (o.arrival !== undefined) {
+        const ease = 1 - Math.pow(1 - Math.min(1, o.arrival), 3);
+        const x0 = -130 + ease * 130;
+        const by = 412;
+        lg.ellipse(x0 + 52, by + 46, 58, 4, "k0");
+        lg.poly([x0, by + 14, x0 + 14, by, x0 + 74, by, x0 + 86, by + 14, x0 + 104, by + 18, x0 + 106, by + 40, x0, by + 40], "k3");
+        lg.rect(x0, by + 26, 106, 2, "m2"); // chrome line
+        lg.rect(x0 + 18, by + 4, 26, 11, "c1");
+        lg.rect(x0 + 48, by + 4, 24, 11, "c1");
+        lg.rect(x0 + 22, by + 5, 3, 9, "c3");
+        lg.rect(x0 + 101, by + 22, 5, 4, "l3"); // headlight
+        lg.rect(x0, by + 22, 3, 4, "r3"); // tail light
+        for (const wx of [x0 + 22, x0 + 84]) {
+          lg.circle(wx, by + 40, 10, "k1");
+          lg.circle(wx, by + 40, 5, "m1");
+        }
+      }
+
     },
     (lg) => {
       // light only touches surfaces (walls, palm, street, car) — not the sky
@@ -235,6 +254,29 @@ export const drawExterior = (g: Gfx, frame: number) => {
   g.glow(238, 236, 10, "#fff0c0", 0.8);
   g.glow(65, 313, 16, WARM, 0.5);
   g.glow(65, 313, 5, "#fff0c0", 0.7);
+  if (o.arrival !== undefined) {
+    const ease = 1 - Math.pow(1 - Math.min(1, o.arrival), 3);
+    const hx = -130 + ease * 130 + 106;
+    g.with(
+      () => {
+        g.ctx.globalCompositeOperation = "lighter";
+        const grd = g.ctx.createLinearGradient(hx, 0, hx + 170, 0);
+        grd.addColorStop(0, "rgba(255,236,190,0.55)");
+        grd.addColorStop(1, "rgba(255,236,190,0)");
+        g.ctx.fillStyle = grd;
+        g.ctx.beginPath();
+        g.ctx.moveTo(hx, 434);
+        g.ctx.lineTo(hx + 180, 404);
+        g.ctx.lineTo(hx + 180, 476);
+        g.ctx.closePath();
+        g.ctx.fill();
+      },
+      {},
+    );
+    g.glow(hx, 436, 14, "#fff2cf", 0.8);
+    // light sweeping across the wall
+    g.glow(hx + 40, 360, 50, "#fff2cf", 0.18 * ease);
+  }
   // top/bottom cinematic vignette
   g.vgrad(0, 0, 270, 70, [
     [0, "rgba(4,8,14,0.55)"],

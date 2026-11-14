@@ -278,6 +278,15 @@ export class Gfx {
     ctx.fillRect(x, y, w, h);
     ctx.restore();
   }
+  /** mirror everything drawn in fn around vertical line x = cx */
+  flipX(cx: number, fn: () => void) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.translate(cx * 2, 0);
+    ctx.scale(-1, 1);
+    fn();
+    ctx.restore();
+  }
   with(fn: () => void, opts: { alpha?: number; mode?: GlobalCompositeOperation; clip?: number[] }) {
     const ctx = this.ctx;
     ctx.save();
