@@ -1,0 +1,42 @@
+{
+  "fps": 30,
+  "total": 41.0,
+  "cold": { "disclaimerIn": 0.1, "disclaimerOut": 1.2, "line": 1.35, "slam": 2.6, "fade": 3.7, "end": 3.9 },
+  "title": { "start": 3.9, "textIn": 4.15, "textOut": 5.95, "end": 6.3 },
+  "act1": {
+    "sponge": 6.3,
+    "label": 6.5,
+    "subSmell": 8.4,
+    "zoom": [9.8, 10.15, 10.5],
+    "flash": [11.2, 12.25, 13.3],
+    "wide": 14.35,
+    "subNo": 14.55,
+    "accuse": 15.9,
+    "end": 17.1
+  },
+  "act2": {
+    "start": 17.4,
+    "label": 17.55,
+    "subMadam": 19.2,
+    "hush": 20.3,
+    "subSponge": 20.45,
+    "slam": 21.3,
+    "react": [22.4, 22.95, 23.5, 24.05],
+    "wide": 24.6,
+    "subCount": 24.8,
+    "mil": 27.0,
+    "end": 28.4
+  },
+  "act3": {
+    "start": 28.6,
+    "thunder": [28.7, 30.3],
+    "sub1": 28.9,
+    "sub2": 30.1,
+    "throw": 31.3,
+    "splash": 31.95,
+    "bell": [32.6, 32.95],
+    "door": 33.8,
+    "end": 35.6
+  },
+  "brand": { "start": 35.6, "logo": 35.7, "line": 36.4, "claim": 37.6, "handle": 38.3, "shine": 38.8 }
+}

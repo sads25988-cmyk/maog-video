@@ -4,13 +4,17 @@ import { StyleFrames } from "./pixel/StyleFrames";
 import { Story, STORY_FRAMES } from "./pixel/Story";
 import { BacteriaAd, BACTERIA_FRAMES } from "./anime/BacteriaAd";
 import { ensureFonts } from "./moaj/fonts";
+import { ThiqaAmya, THIQA_FRAMES } from "./thiqa/ThiqaAmya";
+import { ensureThiqaFonts } from "./thiqa/fonts";
 import { FPS, H, W } from "./moaj/theme";
 
 ensureFonts();
+ensureThiqaFonts();
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Composition id="ThiqaAmya" component={ThiqaAmya} durationInFrames={THIQA_FRAMES} fps={FPS} width={W} height={H} />
       <Composition id="BacteriaAd" component={BacteriaAd} durationInFrames={BACTERIA_FRAMES} fps={FPS} width={W} height={H} />
       <Composition id="MoajStory" component={Story} durationInFrames={STORY_FRAMES} fps={FPS} width={W} height={H} />
       <Composition
